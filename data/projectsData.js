@@ -1,54 +1,46 @@
 const projectsData = {
   en: [
     {
-      title: 'DigitalOcean Tools',
-      description: `DigitalOcean Tools is an open source project built to provide the ability to upload and 
-      delete objects from DigitalOcean Spaces in Azure DevOps Build and Release Management.`,
-      href: 'https://github.com/marceloavf/digitalocean-tools-vsts',
+      title: 'Mercado Libre Clone',
+      description: `Mercado Libre clone made with React, rendering a product page.`,
+      href: 'https://mercadolibre-challenge-pi.vercel.app/',
     },
     {
-      title: 'GitHub Tools',
-      description: `GitHub Tool is an open source project built to provide full implementation to Create and 
-      Modify GitHub Release to Azure DevOps Build and Release Management.`,
-      href: 'https://github.com/marceloavf/github-tools-vsts',
+      title: 'Next.js e-commerce',
+      description: `E-commerce made in Next-js, with integration to Strapi and Sanity.`,
+      href: 'https://ecommerce-nextjs-aqx1mt8aj-facumoyano.vercel.app/',
     },
     {
-      title: 'Docz',
-      description: `Docz is an open source project that I contributed, built to makes it easy to write and publish beautiful 
-      interactive documentation for your code.`,
-      href: 'https://github.com/doczjs/docz',
+      title: 'Crypto Tracker',
+      description: `Crypto Tracker is an application that allows you to see the price of cryptocurrencies in real time. Made with React, Material UI, and RapidAPI`,
+      href: 'https://crypto-coins-market.netlify.app',
     },
     {
-      title: 'Semantic Release',
-      description: `Semantic Release is an open source project that I activelly use and contribue, built to automates 
-      the whole package release workflow including.`,
-      href: 'https://github.com/semantic-release/semantic-release',
+      title: 'Gym App',
+      description: `Application to see gym routines. Made with Next.js, Material UI, and RapidAPI`,
+      href: 'https://nextjs-gym-app.netlify.app/',
     },
   ],
   es: [
     {
-      title: 'DigitalOcean Tools',
-      description: `O DigitalOcean Tools é um projeto de código aberto criado para fornecer a capacidade de manusear objetos do 
-      DigitalOcean Spaces no Azure DevOps.`,
-      href: 'https://github.com/marceloavf/digitalocean-tools-vsts',
+      title: 'Mercado Libre Clon',
+      description: `Clon de Mercado Libre hecho con React, renderizando la página de un producto.`,
+      href: 'https://mercadolibre-challenge-pi.vercel.app/',
     },
     {
-      title: 'GitHub Tools',
-      description: `GitHub Tool é um projeto de código aberto feito para fornecer uma implementação para criar e
-      modificar versões do GitHub para o Azure DevOps.`,
-      href: 'https://github.com/marceloavf/github-tools-vsts',
+      title: 'Next.js e-commerce',
+      description: `E-commerce hecho en Next-js, con integración a Strapi y Sanity.`,
+      href: 'https://ecommerce-nextjs-aqx1mt8aj-facumoyano.vercel.app/',
     },
     {
-      title: 'Docz',
-      description: `Docz é um projeto de código aberto que contribuí, criado para facilitar a escrita e a publicação de uma
-      documentação interativa para seu código.`,
-      href: 'https://github.com/doczjs/docz',
+      title: 'Crypto Tracker',
+      description: `Crypto Tracker es una aplicación que te permite ver el precio de las criptomonedas en tiempo real. Hecho con React, Material UI, y RapidAPI`,
+      href: 'https://crypto-coins-market.netlify.app',
     },
     {
-      title: 'Semantic Release',
-      description: `O Semantic Release é um projeto de código aberto que eu uso e contribuo ativamente, construído para automatizar
-      todo o fluxo de liberação de pacotes.`,
-      href: 'https://github.com/semantic-release/semantic-release',
+      title: 'Gym App',
+      description: `Aplicación para ver rutinas de gimnasio. Hecho con Next.js , Material UI, y RapidAPI`,
+      href: 'https://nextjs-gym-app.netlify.app/',
     },
   ],
 }

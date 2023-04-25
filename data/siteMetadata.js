@@ -1,7 +1,7 @@
 const siteMetadata = {
   title: {
-    en: 'Facundo Moyano – Software Developer',
-    es: 'Facundo Moyano – Desarrollador de Software',
+    en: 'Facundo Moyano – Web developer',
+    es: 'Facundo Moyano – Web developer',
   },
   author: 'Facundo Moyano',
   headerTitle: { en: 'Personal Website', es: 'Sitio personal' },
@@ -17,7 +17,7 @@ const siteMetadata = {
   socialBanner: '/static/images/twitter-card.png',
   email: 'facundo@facumoyanodev.com',
   github: 'https://github.com/facumoyano',
-  linkedin: 'https://www.linkedin.com/facundo-moyano/',
+  linkedin: 'https://www.linkedin.com/in/facundo-moyano-/',
   locale: 'en-US',
   analytics: {
     // supports plausible, simpleAnalytics, umami or googleAnalytics
