@@ -1,13 +1,13 @@
 const siteMetadata = {
   title: {
-    en: 'Facundo Moyano – Web developer',
-    es: 'Facundo Moyano – Web developer',
+    en: 'Facundo Moyano – Web Developer',
+    es: 'Facundo Moyano – Web Developer',
   },
   author: 'Facundo Moyano',
   headerTitle: { en: 'Personal Website', es: 'Sitio personal' },
   description: {
     en: 'A web developer who codes with a passion for crafting great user experiences.',
-    es: 'Un desarrollador web que codea con pasión para crear grandes experiencias de usuario.',
+    es: 'Un desarrollador web que programa con pasión para crear grandes experiencias de usuario.',
   },
   language: 'en-us',
   siteUrl: 'https://facumoyanodev.com',
