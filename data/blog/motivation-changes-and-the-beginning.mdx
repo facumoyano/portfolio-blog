@@ -1,38 +1,39 @@
 ---
-title: 'Motivation, Changes and the beginning'
+title: 'What is the difference between useCallback and useMemo in React?'
 date: '2022-02-15'
-tags: ['talk', 'motivation', 'changes', 'beginning']
+tags: ['React', 'Hooks', 'Learn']
 draft: false
-summary: 'I am starting this site with a purpose - to perpetuate a meaning for my life, and to be a home for my mind.'
+summary: 'What are and how to use the useMemo() and useCallback() functions in React to improve performance and avoid unnecessary rendering of components.'
 layout: 'PostSimple'
 ---
 
-👋 Hello, and welcome to my first post. I make this a place where I will share, learn and teach the little I have learned alongside amazing people.
+If you've worked with React Hooks, you've probably wondered what's the difference between useCallback and useMemo. Both functions are used to memoize values and prevent them from being recalculated on each rendering, but when should we use one or the other?
 
-## Motivation
+First, it is important to understand that useCallback and useMemo expect a function and an array of dependencies as arguments. The difference is that useCallback returns its memoized function when the dependencies change, while useMemo calls its function and returns the result.
 
-I am starting this site with a purpose - to perpetuate a meaning for my life, and to be a home for my mind. Troubled days with a sense of a better future, I walk with that in mind and this project I have been building for a while, and it has allowed me to open my mind and think outside the box in many ways.
+In other words, useCallback gives you referential equality between renderings for functions, while useMemo gives you referential equality between renderings for values.
 
-From the people I have met, the interviews I have participated in, and the whole process of learning and growing, it has a power to move me forward.
+In API terms, the two functions are very similar. For example, useCallback(fn, deps) is equivalent to useMemo(() => fn, deps).
 
-> It's better to look ahead and prepare, than to look back and regret. Jackie Joyner-Kersee
+But when should we use each of them? In general, we should use useCallback when we depend on referential equality between renderings for functions, and useMemo when we depend on referential equality between renderings for values.
 
-![sic-parvis-magna](/static/images/motivation-changes-and-the-beginning/sic-parvis-magna.jpg)
+For example, if we have a function that makes a request to an API and depends on a parameter, we can use use useCallback to memoize the function and ensure that it is not recalculated on each rendering unless the parameter changes.
 
-## Changes
+```javascript
+const fetchData = useCallback((id) => {
+  // Makes a request to the API using the id
+}, [id]);
+```
 
-Well, as you may have realized by now, this site will not be a place just to talk about programming, architecture or development in totality, just like all the changes that have been happening in my life, I have been trying to develop and improve my 'soft skills' as much as my 'hard skills'.
+On the other hand, if we want to calculate a value from a set of data and make sure that it is not recalculated at each rendering, we can use useMemo.
 
-It is a slow and difficult to understand this process, as well as the recent company migration that I am making, everything tends to act in a common direction. I met amazing people and made great friends in this process and I will miss them a lot.
 
-![git-presentation-precisao-sistemas](/static/images/motivation-changes-and-the-beginning/git-presentation-precisao-sistemas.jpg)
+```javascript
+const filteredData = useMemo(() => {
+  // Calculates a value from data
+}, [data, query]);
+```
 
-## The Beginning
-
-I have many ideas for this space, I consider it a beginning, not only for me as a person, but also in spirit. In this whole process of self-knowledge, I have learned new languages, understanding me and others, learned about thinking differently, and had a 'boom' of thinking and acting outside the box.
-
-Greatness from small beginnings, this is the meaning of the phrase engraved on the ring present at the beginning of the site, something that has been with me for a long time, but that begins to have a clearer meaning with each passing day.
-
-![welcome-kit-hotmart](/static/images/motivation-changes-and-the-beginning/welcome-kit-hotmart.jpg)
+In summary, useCallback and useMemo are two powerful tools that allow us to memoize functions and values in React. If we depend on referential equality between renderings for a function, we must use useCallback, and if we depend on referential equality between renderings for a value, we must use useMemo.
 
 Thanks for reading this far ❤️

@@ -1,12 +1,12 @@
 ---
-name: Marcelo Formentão
-avatar: /static/images/profile.png
-occupation: Engenheiro de Software
-company: Fernandópolis, Brasil
-email: me@marceloformentao.dev
+name: Facundo Moyano
+avatar: /static/images/avatar2.png
+occupation: Web developer
+company: Córdoba, Argentina
+email: facundo@facumoyanodev.com
 twitter: https://twitter.com/marceloavf
-linkedin: https://www.linkedin.com/in/marceloavf/
-github: https://github.com/marceloavf
+linkedin: https://www.linkedin.com/in/facu-moyano/
+github: https://github.com/facumoyano
 instagram: https://www.instagram.com/marceloavf/
 ---
 

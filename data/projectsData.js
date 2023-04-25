@@ -25,7 +25,7 @@ const projectsData = {
       href: 'https://github.com/semantic-release/semantic-release',
     },
   ],
-  pt: [
+  es: [
     {
       title: 'DigitalOcean Tools',
       description: `O DigitalOcean Tools é um projeto de código aberto criado para fornecer a capacidade de manusear objetos do 

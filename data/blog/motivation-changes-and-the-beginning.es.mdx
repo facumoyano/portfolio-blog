@@ -1,0 +1,41 @@
+---
+title: '¿Cuál es la diferencia entre useCallback y useMemo en React?'
+date: '2023-04-25'
+tags: ['React', 'Hooks', 'Learn']
+draft: false
+summary: 'Qué son y cómo se utilizan las funciones useMemo() y useCallback() en React para mejorar el rendimiento y evitar renderizados innecesarios de componentes.'
+layout: 'PostSimple'
+---
+
+
+Si has trabajado con React Hooks, probablemente te hayas preguntado cuál es la diferencia entre useCallback y useMemo. Ambas funciones se utilizan para memoizar valores y evitar que se recalculen en cada renderizado, pero ¿cuándo deberíamos utilizar una u otra?
+
+En primer lugar, es importante entender que useCallback y useMemo esperan una función y un array de dependencias como argumentos. La diferencia es que useCallback devuelve su función memoizada cuando las dependencias cambian, mientras que useMemo llama a su función y devuelve el resultado.
+
+En otras palabras, useCallback te da igualdad referencial entre renderizados para funciones, mientras que useMemo te da igualdad referencial entre renderizados para valores.
+
+En términos de API, las dos funciones son muy similares. Por ejemplo, useCallback(fn, deps) es equivalente a useMemo(() => fn, deps).
+
+Pero, ¿cuándo deberíamos usar cada una de ellas? En general, deberíamos utilizar useCallback cuando dependemos de la igualdad referencial entre renderizados para funciones, y useMemo cuando dependemos de la igualdad referencial entre renderizados para valores.
+
+Por ejemplo, si tenemos una función que hace una petición a una API y depende de un parámetro, podemos utilizar useCallback para memoizar la función y asegurarnos de que no se recalcule en cada renderizado, a menos que el parámetro cambie.
+
+```javascript
+const fetchData = useCallback((id) => {
+  // Hace una petición a la API utilizando el id
+}, [id]);
+```
+
+Por otro lado, si queremos calcular un valor a partir de un conjunto de datos y asegurarnos de que no se recalcule en cada renderizado, podemos utilizar useMemo.
+
+
+```javascript
+const filteredData = useMemo(() => {
+  // Calcula un valor a partir de los datos
+}, [data, query]);
+```
+
+En resumen, useCallback y useMemo son dos herramientas poderosas que nos permiten memoizar funciones y valores en React. Si dependemos de la igualdad referencial entre renderizados para una función, debemos utilizar useCallback, y si dependemos de la igualdad referencial entre renderizados para un valor, debemos utilizar useMemo.
+
+
+¡Gracias por leer! ❤️

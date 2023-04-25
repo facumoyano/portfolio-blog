@@ -2,7 +2,6 @@ import { useRouter } from 'next/router'
 import Link from './Link'
 import siteMetadata from '@/data/siteMetadata'
 import SocialIcon from '@/components/social-icons'
-import NowPlaying from '@/components/NowPlaying'
 
 export default function Footer() {
   const { locale } = useRouter()
@@ -17,9 +16,7 @@ export default function Footer() {
           <SocialIcon kind="twitter" href={siteMetadata.twitter} size={5} />
           <SocialIcon kind="instagram" href={siteMetadata.instagram} size={5} />
         </div>
-        <div className="mb-3 flex">
-          <NowPlaying />
-        </div>
+
         <div className="mb-8 flex space-x-2 text-sm text-gray-500 dark:text-gray-400">
           <div>{siteMetadata.author}</div>
           <div>{`© ${new Date().getFullYear()}`}</div>

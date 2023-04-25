@@ -59,13 +59,6 @@ export default function PostLayout({
             <div className="divide-y divide-transparent xl:pb-0 xl:col-span-3 xl:row-span-2">
               <div className="pt-10 pb-8 prose dark:prose-dark max-w-none">{children}</div>
             </div>
-            <div className="pt-6 pb-6 text-sm text-gray-700 dark:text-gray-300">
-              <Link href={discussUrl(slug)} rel="nofollow">
-                {t('common:twitter')}
-              </Link>
-              {` • `}
-              <Link href={editUrl(fileName)}>{t('common:github')}</Link>
-            </div>
             <Comments frontMatter={frontMatter} />
             <footer>
               <div className="flex flex-col text-sm font-medium sm:flex-row sm:justify-between sm:text-base">
