@@ -21,10 +21,10 @@ const siteMetadata = {
   locale: 'en-US',
   analytics: {
     // supports plausible, simpleAnalytics, umami or googleAnalytics
-    plausibleDataDomain: 'facunmoyanodev.com',
+    plausibleDataDomain: 'facumoyanodev.com',
     simpleAnalytics: false,
     umamiWebsiteId: '', // e.g. 123e4567-e89b-12d3-a456-426614174000
-    googleAnalyticsId: 'G-TPC5EVVJLG',
+    googleAnalyticsId: 'G-02CSNKB4SV',
   },
   newsletter: {
     // supports mailchimp, buttondown, convertkit
