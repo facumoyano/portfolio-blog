@@ -1,0 +1,207 @@
+---
+title: 'Dominando las Agregaciones de MongoDB en Node.js: Un Enfoque Práctico para Analizar Ventas de Productos'
+date: '2023-09-07'
+tags: ['MogoDB', 'Node.js', 'Mongoose']
+draft: false
+summary: 'Descubre cómo dominar las agregaciones de MongoDB en Node.js y analizar datos de ventas de productos de manera eficiente. Este artículo te guiará a través de los pasos clave, desde la conexión a MongoDB hasta la creación de consultas de agregación personalizadas. Aprovecha las potentes capacidades de MongoDB para impulsar tus análisis de datos.'
+layout: 'PostSimple'
+imagePost:  '/static/images/aggregations-mongo/mongodbpost.jpg'
+---
+
+
+
+MongoDB ofrece una amplia gama de capacidades de consulta y análisis. Una de las características más poderosas de MongoDB es su capacidad para realizar agregaciones, que permiten realizar operaciones de transformación de datos y análisis avanzado directamente en la base de datos. En este artículo, vamos a ver cómo dominar las agregaciones de MongoDB en Node.js a través de un enfoque práctico para analizar datos de ventas de productos.
+
+## Introducción
+
+Cuando trabajamos con datos de ventas, frecuentemente necesitamos realizar análisis para obtener información valiosa, como los productos más vendidos o los ingresos totales. MongoDB nos permite realizar este tipo de análisis de manera eficiente utilizando sus capacidades de agregación. Veamos como aprovechar estas capacidades para analizar datos de ventas de productos.
+
+## Paso 1: Conexión a MongoDB
+
+Antes de comenzar con las agregaciones, necesitamos establecer una conexión con nuestra base de datos MongoDB.
+
+```javascript
+//app.js
+import express from 'express';
+import mongoose from 'mongoose';
+import salesModel from './models/salesModel.js';
+
+const app = express();
+const port = 3000;
+
+// Conexión a MongoDB
+mongoose.connect('mongodb+srv://prueba:123@cluster0.vujnisr.mongodb.net/', { useNewUrlParser: true, useUnifiedTopology: true })
+.then(() => {
+    console.log('Se conectó correctamente a MongoDB');
+})
+.catch((err) => {
+    console.error('Error al conectar a MongoDB:', err);
+});
+```
+
+Asegurense de reemplazar el string de conexión con el de su base de datos.
+
+## Paso 2: Desarrollamos el modelo de ventas de "Remeras"
+
+En este paso desarrollaremos el Schema de ventas de remeras en donde se guardaran nuestros datos
+
+
+```javascript
+//salesModel.js
+import mongoose from 'mongoose';
+
+const salesSchema = new mongoose.Schema({
+    name: String,
+    size: String,
+    price: Number,
+    quantity: Number,
+    date: { type: Date, default: Date.now }
+});
+
+const salesModel = mongoose.model('Sales', salesSchema);
+
+export default salesModel;
+```
+
+## Paso 3: Inserción de datos en la base de datos
+
+Una vez que estamos conectados a la base de datos, podemos insertar datos de ventas en ella. En el mismo archivo app.js, creamos la función insertDataDB:
+
+```javascript
+const sales = [
+  { name: "Nike", size: "M", price: 50, quantity: 10, date: "2023-01-01" },
+  { name: "Adidas", size: "L", price: 60, quantity: 15, date: "2023-02-01" },
+  { name: "Puma", size: "S", price: 40, quantity: 5, date: "2023-03-01" },
+  { name: "Nike", size: "L", price: 70, quantity: 20, date: "2023-04-01" },
+  { name: "Nike", size: "M", price: 50, quantity: 10, date: "2023-05-01" },
+  { name: "Puma", size: "L", price: 60, quantity: 15, date: "2023-06-01" },
+  { name: "Adidas", size: "S", price: 40, quantity: 5, date: "2023-07-01" },
+  { name: "Puma", size: "L", price: 70, quantity: 20, date: "2023-08-01" },
+  { name: "Adidas", size: "M", price: 50, quantity: 30, date: "2023-09-01" },
+  { name: "Adidas", size: "L", price: 60, quantity: 15, date: "2023-10-01" },
+];
+
+// Función para insertar datos en la base de datos
+const insertDataDB = async () => {
+    try {
+        await salesModel.insertMany(sales);
+        console.log('Datos insertados correctamente');
+    } catch (err) {
+        console.error('Error al insertar datos:', err);
+    }
+};
+```
+
+Esta función utiliza el método insertMany de Mongoose para insertar varios documentos en la base de datos a la vez. 
+
+## Paso 4: Función principal
+En esta función nos encargaremos de llamar a las funciones que necesitamos para realizar las agregaciones.
+
+```javascript
+// Función principal
+const main = async () => {
+    await insertDataDB();
+}
+
+main();
+```
+
+## Paso 5: Agregación de Datos de Ventas
+
+El corazón de nuestro análisis se encuentra en la función **`groupedSales`**, que realiza una serie de agregaciones en los datos de ventas.
+
+En este punto  vamos a agrupar los documentos por el campo “name” y vamos a calcular la suma total de “quantity” para cada grupo
+
+```javascript
+const groupedSales = async () => {
+  // Utilizamos el método aggregate de Mongoose para crear nuestra consulta de agregación
+  const sales = await salesModel.aggregate([
+    // La etapa $match filtra los documentos para incluir solo aquellos en donde el size es 'M'
+    {
+      $match: { size: "M" },
+    },
+    // La etapa $group agrupa los documentos por el campo name y calcula la suma total de quantity para cada grupo
+    {
+      $group: {
+        _id: "$name",
+        totalQuantity: { $sum: "$quantity" },
+      },
+    },
+  
+  ]);
+  console.log(sales);
+};
+
+//Comentamos insertDataDB para no insertar los datos de nuevo y llamamos a groupedSales
+const main = async () => {
+    //await insertDataDB();
+	await groupedSales();
+}
+
+main();
+```
+
+Ahora veamos por consola el resultado:
+
+![Resultado de consulta](/static/images/aggregations-mongo/consolelog.png)
+
+La cantidad de remeras vendidas con el talle 'M' fueron 20 de Nike y 30 de Adidas.
+
+Ahora supongamos que el equipo de marketing necesita nuevos cambios en la forma de entregar nuestra información:
+
+- Primero, necesitan que los resultados se entreguen de mayor a menor por cantidad de ventas.
+- Segundo, necesitan que los resultados se almacenen en una nueva colección “reports” con el fin de poder consultar el reporte para análisis futuros.
+
+```javascript
+// La etapa $sort ordena los grupos por totalQuantity en orden descendente
+    {
+      $sort: { totalQuantity: -1 },
+    },
+
+    /*En esta etapa guardamos todos los documentos de la agregación, en un nuevo documento dentro de un arreglo llamado sales. 
+    De otra manera los resultados se guardan sueltos en la colección. 
+    $push indica que se guardan en un arreglo y $$ROOT que toma todo el documento para insertar, 
+    sin eso tendríamos que especificar atributo por atrubuto que queremos agregar
+    */
+
+    {
+      $group: {
+        _id: 1,
+        sales: {
+          $push: "$$ROOT",
+        },
+      },
+    },
+
+    /* Una vez que agrupamos los elementos en un único documento,
+    utilizamos la etapa $project para generar un nuevo ObjectId, así podremos guardarlo sin haber coincidencias.
+    Al utulizar un $project, si colocamos _id: 0, significa que genere un ObjectId Propio
+    */
+    {
+      $project: {
+        _id: 0,
+        sales: "$sales",
+      },
+    },
+    /* En esta etapa final, agregamos los elementos a la colección "salesReport". La etapa $merge siempre debe ser la última etapa de una agregación.
+    */
+    {
+      $merge: {
+        into: "salesReport",
+      },
+    },
+```
+
+Veamos el resultado final en nuestra base de datos:
+
+![Sales Report](/static/images/aggregations-mongo/salesReportMongo.png)
+
+Gracias a los nuevos pasos de nuestra aggregation, ahora no sólo podemos obtener la información de los ventas realizadas. Sino que acabamos de armar un sistema para poder generar reportes, para análisis de datos de otros sectores.
+
+## Conclusión
+En este artículo, obtuvimos un reporte de ventas de remeras talle 'M', vimos cómo dominar las agregaciones de MongoDB en Node.js para analizar datos. Aprendimos a establecer una conexión con MongoDB, insertar datos en la base de datos y aplicar agregaciones para obtener información valiosa de nuestros datos. Las capacidades de agregación de MongoDB son una herramienta poderosa para cualquier desarrollador que trabaje con datos complejos, obviamente puedes adaptarlo siempre según tus necesidades.
+
+Fuente: (https://www.mongodb.com/docs/upcoming/aggregation/)
+
+¡Saludos!
+

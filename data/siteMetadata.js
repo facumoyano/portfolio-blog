@@ -15,7 +15,7 @@ const siteMetadata = {
   siteLogo: '/static/images/logo.png',
   image: '/static/images/avatar.png',
   socialBanner: '/static/images/twitter-card.png',
-  email: 'facundo@facumoyanodev.com',
+  email: 'facumoyano44@gmail.com',
   github: 'https://github.com/facumoyano',
   linkedin: 'https://www.linkedin.com/in/facundo-moyano-/',
   locale: 'en-US',

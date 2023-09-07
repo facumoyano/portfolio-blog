@@ -3,7 +3,7 @@ name: Facundo Moyano
 avatar: /static/images/avatar2.png
 occupation: Web developer
 company: Córdoba, Argentina
-email: facundo@facumoyanodev.com
+email: facumoyano44@gmail.com
 linkedin: https://www.linkedin.com/in/facundo-moyano-/
 github: https://github.com/facumoyano
 ---

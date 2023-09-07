@@ -146,10 +146,19 @@ export const BlogSEO = ({
   url,
   availableLocales,
   images = [],
+  imagePost,
 }) => {
   const router = useRouter()
   const publishedAt = new Date(date).toISOString()
   const modifiedAt = new Date(lastmod || date).toISOString()
+  const ogImageUrl = imagePost
+    ? `${siteMetadata.siteUrl}${imagePost}`
+    : siteMetadata.siteUrl + siteMetadata.socialBanner
+  console.log('ogImageUrl', ogImageUrl)
+
+  const twImageUrl = imagePost
+    ? `${siteMetadata.siteUrl}${imagePost}`
+    : siteMetadata.siteUrl + siteMetadata.socialBanner
   let imagesArr =
     images.length === 0
       ? [siteMetadata.socialBanner]
@@ -202,15 +211,13 @@ export const BlogSEO = ({
     description: summary,
   }
 
-  const twImageUrl = featuredImages[0].url
-
   return (
     <>
       <CommonSEO
         title={title}
         description={summary}
         ogType="article"
-        ogImage={featuredImages}
+        ogImage={ogImageUrl}
         twImage={twImageUrl}
         availableLocales={availableLocales}
       />

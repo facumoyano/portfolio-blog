@@ -23,7 +23,7 @@ export default function PostLayout({
   availableLocales,
   children,
 }) {
-  const { slug, fileName, date, title } = frontMatter
+  const { slug, fileName, date, title, imagePost } = frontMatter
   const { t } = useTranslation()
   const { locale } = useRouter()
 
@@ -33,6 +33,7 @@ export default function PostLayout({
         availableLocales={availableLocales}
         url={`${siteMetadata.siteUrl}/blog/${frontMatter.slug}`}
         {...frontMatter}
+        imagePost={imagePost}
       />
       <ScrollTopAndComment />
       <article>
@@ -90,3 +91,9 @@ export default function PostLayout({
     </SectionContainer>
   )
 }
+
+/*En esta etapa guardamos todos los documentos de la agregación, en un nuevo documento dentro de un arreglo llamado sales. 
+De otra manera los resultados se guardan sueltos en la colección. 
+$push indica que se guardan en un arreglo y $$ROOT que toma todo el documento para insertar, 
+sin eso tendríamos que especificar atributo por atrubuto que queremos agregar
+*/

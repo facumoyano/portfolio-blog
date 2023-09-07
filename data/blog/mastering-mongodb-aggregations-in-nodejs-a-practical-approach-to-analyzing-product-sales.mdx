@@ -1,0 +1,207 @@
+---
+title: 'Mastering MongoDB Aggregations in Node.js: A Practical Approach to Analyzing Product Sales'
+date: '2023-09-07'
+tags: ['MogoDB', 'Node.js', 'Mongoose']
+draft: false
+summary: "Discover how to master MongoDB aggregations in Node.js and analyze product sales data efficiently. This article will walk you through the key steps, from connecting to MongoDB to creating custom aggregation queries. Take advantage of MongoDB's powerful capabilities to power your data analytics."
+layout: 'PostSimple'
+imagePost:  '/static/images/aggregations-mongo/mongodbpost.jpg'
+---
+
+
+
+MongoDB offers a wide range of query and analysis capabilities. One of the most powerful features of MongoDB is its ability to perform aggregations, which allow you to perform data transformation operations and advanced analytics directly on the database. In this article, we will look at how to master MongoDB aggregations in Node.js through a practical approach to analyzing product sales data.
+
+## Introduction
+
+When working with sales data, we often need to perform analysis to obtain valuable information, such as top-selling products or total revenue. MongoDB allows us to perform this type of analysis efficiently using its aggregation capabilities. Let's see how to leverage these capabilities to analyze product sales data.
+
+## Paso 1: MongoDB Connection
+
+Before starting with aggregations, we need to establish a connection to our MongoDB database.
+
+```javascript
+//app.js
+import express from 'express';
+import mongoose from 'mongoose';
+import salesModel from './models/salesModel.js';
+
+const app = express();
+const port = 3000;
+
+// MongoDB Connection
+mongoose.connect('mongodb+srv://prueba:123@cluster0.vujnisr.mongodb.net/', { useNewUrlParser: true, useUnifiedTopology: true })
+.then(() => {
+    console.log('Successfully connected to MongoDB');
+})
+.catch((err) => {
+    console.error('Error connecting to MongoDB:', err);
+});
+```
+
+Be sure to replace the connection string with your database string.
+
+## Step 2: We developed the sales model for "T-shirts".
+
+In this step we will develop the T-shirt sales schema where our data will be stored.
+
+
+```javascript
+//salesModel.js
+import mongoose from 'mongoose';
+
+const salesSchema = new mongoose.Schema({
+    name: String,
+    size: String,
+    price: Number,
+    quantity: Number,
+    date: { type: Date, default: Date.now }
+});
+
+const salesModel = mongoose.model('Sales', salesSchema);
+
+export default salesModel;
+```
+
+## Step 3: Inserting data into the database
+
+Once we are connected to the database, we can insert sales data into it. In the same app.js file, we create the insertDataDB function:
+
+```javascript
+const sales = [
+  { name: "Nike", size: "M", price: 50, quantity: 10, date: "2023-01-01" },
+  { name: "Adidas", size: "L", price: 60, quantity: 15, date: "2023-02-01" },
+  { name: "Puma", size: "S", price: 40, quantity: 5, date: "2023-03-01" },
+  { name: "Nike", size: "L", price: 70, quantity: 20, date: "2023-04-01" },
+  { name: "Nike", size: "M", price: 50, quantity: 10, date: "2023-05-01" },
+  { name: "Puma", size: "L", price: 60, quantity: 15, date: "2023-06-01" },
+  { name: "Adidas", size: "S", price: 40, quantity: 5, date: "2023-07-01" },
+  { name: "Puma", size: "L", price: 70, quantity: 20, date: "2023-08-01" },
+  { name: "Adidas", size: "M", price: 50, quantity: 30, date: "2023-09-01" },
+  { name: "Adidas", size: "L", price: 60, quantity: 15, date: "2023-10-01" },
+];
+
+// Function for inserting data into the database
+const insertDataDB = async () => {
+    try {
+        await salesModel.insertMany(sales);
+        console.log('Data inserted correctly');
+    } catch (err) {
+        console.error('Error inserting data:', err);
+    }
+};
+```
+
+This function uses the insertMany method of Mongoose to insert several documents into the database at once. 
+
+## Paso 4: Main function
+In this function we will call the functions we need to perform the aggregations.
+
+```javascript
+const main = async () => {
+    await insertDataDB();
+}
+
+main();
+```
+
+## Paso 5: Sales Data Aggregation
+
+The heart of our analysis lies in the **`groupedSales`** function, which performs a series of aggregations on the sales data.
+
+At this point we are going to group the documents by the "name" field and calculate the sum total of "quantity" for each group.
+
+
+```javascript
+const groupedSales = async () => {
+  // We use the aggregate method of Mongoose to create our aggregation query
+  const sales = await salesModel.aggregate([
+    // The $match stage filters the documents to include only those where the size is 'M'.
+    {
+      $match: { size: "M" },
+    },
+    // The $group stage groups the documents by the name field and calculates the total sum of quantity for each group.
+    {
+      $group: {
+        _id: "$name",
+        totalQuantity: { $sum: "$quantity" },
+      },
+    },
+  
+  ]);
+  console.log(sales);
+};
+
+// We comment insertDataDB to avoid inserting the data again and call groupedSales
+const main = async () => {
+    //await insertDataDB();
+	await groupedSales();
+}
+
+main();
+```
+
+Now let's see the result by console:
+
+![Resultado de consulta](/static/images/aggregations-mongo/consolelog.png)
+
+The number of T-shirts sold with size 'M' was 20 from Nike and 30 from Adidas.
+
+Now let's suppose that the marketing team needs new changes in the way they deliver our information:
+
+- First, they need the results to be delivered from highest to lowest by number of sales.
+- Second, they need the results to be stored in a new "reports" collection in order to be able to refer to the report for future analysis.
+
+```javascript
+// The $sort stage sorts the groups by totalQuantity in descending order
+    {
+      $sort: { totalQuantity: -1 },
+    },
+
+    /*At this stage we save all the documents of the aggregation, in a new document within an array called salts. 
+    Otherwise the results are saved loose in the collection. 
+    $$push indicates that they are saved in an array and $$ROOT that it takes the whole document to insert, 
+    without that we would have to specify attribute by attribute that we want to add
+    */
+
+    {
+      $group: {
+        _id: 1,
+        sales: {
+          $push: "$$ROOT",
+        },
+      },
+    },
+
+    /* Once we group the elements in a single document,
+    we use the $project stage to generate a new ObjectId, so we can save it without overlaps.
+    When using a $project, if we put _id: 0, it means that it generates an ObjectId of its own.
+    */
+    {
+      $project: {
+        _id: 0,
+        sales: "$sales",
+      },
+    },
+    /* In this final stage, we add the elements to the "salesReport" collection. The $merge stage must always be the last stage of an aggregation.
+    */
+    {
+      $merge: {
+        into: "salesReport",
+      },
+    },
+```
+
+Let's see the final result in our database:
+
+![Sales Report](/static/images/aggregations-mongo/salesReportMongo.png)
+
+Thanks to the new steps of our aggregation, now we can not only get the information of the sales made. We have just set up a system to be able to generate reports for data analysis in other sectors.
+
+## Conclusion
+In this article, we got a report on sales of size 'M' t-shirts, we saw how to master MongoDB aggregations in Node.js to analyze data. We learned how to establish a connection to MongoDB, insert data into the database and apply aggregations to get valuable information from our data. MongoDB's aggregation capabilities are a powerful tool for any developer working with complex data, obviously you can always adapt it according to your needs.
+
+Source: (https://www.mongodb.com/docs/upcoming/aggregation/)
+
+Best Regards!
+
